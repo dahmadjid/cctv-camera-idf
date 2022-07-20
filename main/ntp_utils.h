@@ -25,7 +25,7 @@ void ntpInit(const char* time_zone) // example: "UTC-1" is UTC+1 (offset is inve
 }
 
 
-void getTime(time_t* now, tm* timeinfo)
+void getTime(time_t* now, struct tm* timeinfo)
 {
     time(now);
     localtime_r(now, timeinfo);

@@ -58,7 +58,7 @@ static const camera_config_t camera_config = {
 void camInit()
 {
     //initialize the camera
-    esp_camera_init(&camera_config);
+    esp_err_t err = esp_camera_init(&camera_config);
     if (err != ESP_OK)
     {
         ESP_LOGE(image_tag, "Camera Init Failed");
