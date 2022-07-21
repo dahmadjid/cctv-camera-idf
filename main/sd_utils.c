@@ -46,28 +46,42 @@ void sdInit(void)
 }
 
 
-void writeImg(const char* file_path, uint8_t* img, int len)
+int writeBytes(const char* file_path, void* bytes, size_t element_size, int len)
 {
 
   
     FILE* f = fopen(file_path, "w");
     if (!f) 
     {
-        ESP_LOGE(SD_TAG, "Failed to open img file for writing");
-        return;
+        ESP_LOGE(SD_TAG, "Failed to open file for writing");
+        fclose(f);
+        return -1;
     }
 
-    size_t out = fwrite((void*)img, 1, len, f);
-    ESP_LOGI(SD_TAG, "Wrote %zu bytes out of %d", out, len);
+    size_t out = fwrite(bytes, element_size, len, f);
+    ESP_LOGI(SD_TAG, "Wrote %zu elements out of %d", out, len);
 
     fclose(f);
     
-    if (len > out)
-    {
-        ESP_LOGE(SD_TAG, "SD full");
-    }
+   
+    return out;
 }
 
+int readBytes(const char* file_path, void* buf, size_t element_size, int len)
+{
+    FILE* f = fopen(file_path, "r");
+    if (!f) 
+    {
+        ESP_LOGE(SD_TAG, "Failed to open file for reading");
+        return -1;
+    }
+
+    size_t out = fread(buf, element_size, len, f);
+    ESP_LOGI(SD_TAG, "read %zu elements out of %d", out, len);
+
+    fclose(f);
+    return out;
+}
 
 void writeTxt(const char* file_path, const char* text)
 {
@@ -104,3 +118,29 @@ void readTxt(const char* file_path, char* buf)
     }
     fclose(f);
 }
+
+
+
+bool exists(const char* file_path)
+{
+
+    FILINFO fno;
+    FRESULT fr = f_stat(file_path, &fno);
+    if (fr == FR_OK)
+    {
+        ESP_LOGI(SD_TAG, "File %s exists", file_path);
+        return true;
+    }
+    else if (fr == FR_NO_FILE || fr == FR_NO_PATH)
+    {
+        ESP_LOGW(SD_TAG, "File %s doesnt exists", file_path);
+        return false;
+    }
+    else
+    {  
+        ESP_LOGE(SD_TAG, "Uknown Error err=%d", (int)fr);
+        return false;
+    }
+}
+
+

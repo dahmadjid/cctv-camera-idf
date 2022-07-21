@@ -31,14 +31,30 @@ extern "C" {
  */
 void sdInit(void);
 
+
 /**
  * @brief Simply write buffer into a file, used to write jpeg images from the framebuffer ptr
  * 
  * @param file_path name of the file to write to. example /mountpoint/img.jpg 
- * @param img ptr to buffer that holds image data
- * @param len number of bytes in the image
+ * @param bytes ptr to buffer that holds bytes data
+ * @param element_size; size of each element to write
+ * @param len number of elements in the buffer
+ * @return number of elements written
  */
-void writeImg(const char* file_path, uint8_t* img, int len);
+int writeBytes(const char* file_path, void* bytes, size_t element_size, int len);
+
+
+/**
+ * @brief read bytes from a file into a buffer
+ * 
+ * @param file_path name of the file to read from. example /mountpoint/info.data
+ * @param buf ptr to output buffer
+ * @param element_size; size of each element to read
+ * @param len number of elements to read
+ * @return number of elements read
+ */
+int readBytes(const char* file_path, void* buf, size_t element_size, int len);
+
 
 /**
  * @brief 
@@ -46,6 +62,7 @@ void writeImg(const char* file_path, uint8_t* img, int len);
  * @param file_path name of the file to write to. example /mountpoint/newfile.txt 
  * @param text string you want to write
  */
+
 void writeTxt(const char* file_path, const char* text);
 
 /**
@@ -55,6 +72,17 @@ void writeTxt(const char* file_path, const char* text);
  * @param buf output char buffer, currently supports reading upto 100 char including null terminator. enough for the purposes of the cctv-cam-project
  */
 void readTxt(const char* file_path, char* buf);
+
+/**
+ * @brief tests if a file exists, this uses fatfs api directly
+ * 
+ * @param file_path name of the file without mountpoint, so its smth like newfile.txt instead of /mountpoint/newfile.txt  
+ * @return true if it exists
+ * @return false if it doesnt exist
+ */
+bool exists(const char* file_path);
+
+
 
 #ifdef __cplusplus
 }
