@@ -13,6 +13,9 @@
 #include "sdmmc_cmd.h"
 #include "sdkconfig.h"
 #include "driver/sdmmc_host.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "freertos/semphr.h"
 
 #define SD_TAG "SDCARD"
 
@@ -51,7 +54,10 @@ int writeBytes(const char* file_path, void* bytes, size_t element_size, int len)
  * @param buf ptr to output buffer
  * @param element_size; size of each element to read
  * @param len number of elements to read
- * @return number of elements read
+ * @return -1 failed to open file
+ * @return 0 feof is false (end of file not reached)
+ * @return >0 feof is true (end of file reached) and number corresponds to number of elements read
+ * 
  */
 int readBytes(const char* file_path, void* buf, size_t element_size, int len);
 

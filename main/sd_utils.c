@@ -1,5 +1,6 @@
 #include "sd_utils.h"
 
+
 void sdInit(void)
 {
     esp_err_t ret;
@@ -78,9 +79,13 @@ int readBytes(const char* file_path, void* buf, size_t element_size, int len)
 
     size_t out = fread(buf, element_size, len, f);
     ESP_LOGI(SD_TAG, "read %zu elements out of %d", out, len);
-
+    if (feof(f))
+    {
+        fclose(f);
+        return out; 
+    }
     fclose(f);
-    return out;
+    return 0;
 }
 
 void writeTxt(const char* file_path, const char* text)
