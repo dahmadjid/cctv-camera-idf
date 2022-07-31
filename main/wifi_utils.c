@@ -20,7 +20,7 @@
 
 static EventGroupHandle_t wifi_event_group;
 static int retry_num = 0;
-
+esp_ip4_addr_t sta_ip = {0};
 
 static void eventHandlerSTA(void *arg, esp_event_base_t event_base, int32_t event_id, void *event_data)
 {
@@ -60,6 +60,7 @@ static void eventHandlerSTA(void *arg, esp_event_base_t event_base, int32_t even
             {
                 ip_event_got_ip_t *event = (ip_event_got_ip_t *)event_data;
                 ESP_LOGI(WIFI_TAG, "STA Got ip:" IPSTR, IP2STR(&event->ip_info.ip));
+                sta_ip.addr = event->ip_info.ip.addr;
                 retry_num = 0;
                 xEventGroupSetBits(wifi_event_group, WIFI_CONNECTED_BIT);
                 break;

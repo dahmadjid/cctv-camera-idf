@@ -49,7 +49,7 @@ static const camera_config_t camera_config = {
     LEDC_CHANNEL_0,
 
     PIXFORMAT_JPEG, //YUV422,GRAYSCALE,RGB565,JPEG
-    FRAMESIZE_FHD,  //QQVGA-UXGAQVGA|CIF|VGA|SVGA|XGA|SXGA|UXGA Do not use sizes above QVGA when not JPEG
+    FRAMESIZE_SVGA,  //QQVGA-UXGAQVGA|CIF|VGA|SVGA|XGA|SXGA|UXGA Do not use sizes above QVGA when not JPEG
 
     12, //0-63 lower number means higher quality
     1   //if more than one, i2s runs in continuous mode. Use only with JPEG
